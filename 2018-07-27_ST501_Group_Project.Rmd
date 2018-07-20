@@ -1,0 +1,77 @@
+---
+title: "ST501 Group Project"
+author: "Michael DeWitt"
+date: "7/20/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+# Part 1 Convergences
+
+## A
+
+## B
+
+## C
+Derrive the CDF of the double exponential distribution.
+
+$$f_Y(y) = \frac{1}{2b} * e^{-(\frac{|{y-\mu|)}}{b})}$$
+
+This yields two cases for the CDF:
+
+$$
+F_Y(y)=
+\begin{cases}
+\int_{-\infty}^tf_Y(Y)dt & \text{for } y \le \mu \\
+\int^{\infty}_tf_Y(Y)dt & \text{for } y \ge \mu \\
+\end{cases}
+$$
+
+Solving for these leaves us with the following:
+
+For $y \le \mu$ :
+
+$$\int_{-\infty}^tf_Y(Y)dt$$
+$$\int_{-\infty}^t\frac{1}{2b} * e^{-(\frac{{t-\mu}}{b})}dt$$
+We know that in this case we are solving for when the exponent is positive.
+
+$$\int_{-\infty}^t\frac{1}{2b} * e^{(\frac{|{t-\mu|)}}{b})}dt$$
+
+$$\frac{1}{2b} * e^{(\frac{t-\mu}{b})}*b|_{-\infty}^{t}=\frac{1}{2}e^{(\frac{t-\mu}{b})} - 0 = \frac{1}{2}e^{(\frac{t-\mu}{b})}$$
+
+For the case where $y \ge \mu$
+
+$$\int_{-\infty}^tf_Y(Y)dt$$
+
+$$\int_{-\infty}^t\frac{1}{2b} * e^{-(\frac{{t-\mu}}{b})}dt$$
+
+This must be further split into:
+
+$$\int_{-\infty}^\mu\frac{1}{2b} * e^{-(\frac{{t-\mu}}{b})}dt + \int_{\mu}^t\frac{1}{2b} * e^{-(\frac{{t-\mu}}{b})}dt$$
+
+$$\frac{1}{2b} * e^{(\frac{-t+\mu}{b})}*-b|_{-\infty}^{\mu} + \frac{1}{2b} * e^{(\frac{-t+\mu}{b})}*-b|_{\mu}^{t}$$
+
+$$\frac{1}{2} - e^{\frac{\mu-t}{b}} + \frac{1}{2}$$
+
+Thus for this case:
+
+$$1-e^{\frac{\mu-t}{b}}$$
+
+In conclusion the CDF for the double exponential distribution is:
+
+$$
+F_Y(y)=
+\begin{cases}
+\frac{1}{2}e^{(\frac{t-\mu}{b})} & \text{for } y \le \mu \\
+1-e^{\frac{\mu-t}{b}} & \text{for } y \ge \mu
+\end{cases}
+$$
+
+## D
+
+## E
