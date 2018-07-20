@@ -1,0 +1,21 @@
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+# project
+
+The goal of this project is to work and complete on our ST501 group
+project. **The project is due 2018-07-27**.
+
+# Key Project Pieces
+
+## PArt I Convergence in Probability
+
+Give a derivation of what L converges to in probability
+
+Explain what \(K = \sqrt{L}\) converges to and why
+
+Derive the CDF of Y
+
+Some sample size stuff
+
+## Part II Convergence in Distribution
