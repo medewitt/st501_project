@@ -7,6 +7,7 @@ output: pdf_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
 ```
 
 # Introduction
@@ -73,5 +74,28 @@ F_Y(y)=
 $$
 
 ## D
+
+
+```{r}
+
+model_grid <- tibble(N = 50,
+                     n = seq(1, 250, 1))
+
+
+rdoublex <- function(mu, b, u){
+  b*log(2*u) + mu
+}
+
+my_list <-list()
+for(i in 1:250){
+  random_uniform <- runif(i)
+  out <- mean(rdoublex(mu = 0,b = 5,u = random_uniform))
+  
+  my_list[[i]] <- data.frame(n = i, mu = out)
+}
+
+
+
+```
 
 ## E
