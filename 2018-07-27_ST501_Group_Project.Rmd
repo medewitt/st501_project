@@ -93,7 +93,7 @@ output_matrix <- matrix(0, nrow= 250, ncol = 50)
 
 for( j in 1:50){
   for(i in 1:250){
-    random_value <- runif(i, -.5, 5)
+    random_value <- runif(i)
     output_matrix[i, j]<- mean(vapply(random_value, FUN = rdoublex, double(1)))
   }
 }
