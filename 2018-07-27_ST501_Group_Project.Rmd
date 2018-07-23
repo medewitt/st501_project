@@ -37,39 +37,39 @@ Solving for these leaves us with the following:
 
 For $y \le \mu$ :
 
-$$\int_{-\infty}^tf_Y(Y)dt$$
-$$\int_{-\infty}^t\frac{1}{2b} * e^{-(\frac{{t-\mu}}{b})}dt$$
+$$\int_{-\infty}^yf_Y(Y)dt$$
+$$\int_{-\infty}^y\frac{1}{2b} * e^{-(\frac{{t-\mu}}{b})}dt$$
 We know that in this case we are solving for when the exponent is positive.
 
-$$\int_{-\infty}^t\frac{1}{2b} * e^{(\frac{|{t-\mu|)}}{b})}dt$$
+$$\int_{-\infty}^y\frac{1}{2b} * e^{(\frac{|{t-\mu|)}}{b})}dt$$
 
-$$\frac{1}{2b} * e^{(\frac{t-\mu}{b})}*b|_{-\infty}^{t}=\frac{1}{2}e^{(\frac{t-\mu}{b})} - 0 = \frac{1}{2}e^{(\frac{t-\mu}{b})}$$
+$$\frac{1}{2b} * e^{(\frac{t-\mu}{b})}*b|_{-\infty}^{y}=\frac{1}{2}e^{(\frac{t-\mu}{b})} - 0 = \frac{1}{2}e^{(\frac{t-\mu}{b})}$$
 
 For the case where $y \ge \mu$
 
-$$\int_{-\infty}^tf_Y(Y)dt$$
+$$\int_{-\infty}^yf_Y(Y)dt$$
 
-$$\int_{-\infty}^t\frac{1}{2b} * e^{-(\frac{{t-\mu}}{b})}dt$$
+$$\int_{-\infty}^y\frac{1}{2b} * e^{-(\frac{{t-\mu}}{b})}dt$$
 
 This must be further split into:
 
-$$\int_{-\infty}^\mu\frac{1}{2b} * e^{-(\frac{{t-\mu}}{b})}dt + \int_{\mu}^t\frac{1}{2b} * e^{-(\frac{{t-\mu}}{b})}dt$$
+$$\int_{-\infty}^\mu\frac{1}{2b} * e^{-(\frac{{t-\mu}}{b})}dt + \int_{\mu}^y\frac{1}{2b} * e^{-(\frac{{t-\mu}}{b})}dt$$
 
-$$\frac{1}{2b} * e^{(\frac{-t+\mu}{b})}*-b|_{-\infty}^{\mu} + \frac{1}{2b} * e^{(\frac{-t+\mu}{b})}*-b|_{\mu}^{t}$$
+$$\frac{1}{2b} * e^{(\frac{-t+\mu}{b})}*-b|_{-\infty}^{\mu} + \frac{1}{2b} * e^{(\frac{-t+\mu}{b})}*-b|_{\mu}^{y}$$
 
-$$\frac{1}{2} - e^{\frac{\mu-t}{b}} + \frac{1}{2}$$
+$$\frac{1}{2} - \frac{1}{2}e^{\frac{\mu-y}{b}} + \frac{1}{2}$$
 
 Thus for this case:
 
-$$1-e^{\frac{\mu-t}{b}}$$
+$$1-\frac{1}{2}e^{\frac{\mu-y}{b}}$$
 
 In conclusion the CDF for the double exponential distribution is:
 
 $$
 F_Y(y)=
 \begin{cases}
-\frac{1}{2}e^{(\frac{t-\mu}{b})} & \text{for } y \le \mu \\
-1-e^{\frac{\mu-t}{b}} & \text{for } y \ge \mu
+\frac{1}{2}e^{(\frac{y-\mu}{b})} & \text{for } y \le \mu \\
+1-\frac{1}{2}e^{\frac{\mu-y}{b}} & \text{for } y \ge \mu
 \end{cases}
 $$
 
@@ -78,23 +78,32 @@ $$
 
 ```{r}
 
-model_grid <- tibble(N = 50,
-                     n = seq(1, 250, 1))
+set.seed(336)
 
-
-rdoublex <- function(mu, b, u){
-  b*log(2*u) + mu
-}
-
-my_list <-list()
-for(i in 1:250){
-  random_uniform <- runif(i)
-  out <- mean(rdoublex(mu = 0,b = 5,u = random_uniform))
-  
-  my_list[[i]] <- data.frame(n = i, mu = out)
+rdoublex <- function(u, mu = 0, b = 5){
+  if( u > 0){
+    mu + b*log(2*u)
+  }else {
+     mu - b*log(2-2*u)
+  }
 }
 
 
+output_matrix <- matrix(0, nrow= 250, ncol = 50)
+
+for( j in 1:50){
+  for(i in 1:250){
+    random_value <- runif(i, -.5, 5)
+    output_matrix[i, j]<- mean(vapply(random_value, FUN = rdoublex, double(1)))
+  }
+}
+
+output_matrix %>% 
+  as.data.frame() %>% 
+  mutate(N = 1:250) %>% 
+  gather(replication, value, -N) %>% 
+  ggplot(aes(N, value))+
+  geom_point(alpha=1/5)
 
 ```
 
