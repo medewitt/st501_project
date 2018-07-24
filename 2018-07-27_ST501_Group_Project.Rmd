@@ -2,7 +2,9 @@
 title: "ST501 Group Project"
 author: "Our Group"
 date: "7/20/2018"
-output: pdf_document
+output:
+  html_document:
+    df_print: paged
 ---
 
 ```{r setup, include=FALSE}
@@ -105,32 +107,75 @@ $$1-\frac{1}{2}e^{\frac{\mu-y}{b}}$$
 
 In conclusion the CDF for the double exponential distribution is:
 
-$$
-F_Y(y)=
+$$F_Y(y)=
 \begin{cases}
 \frac{1}{2}e^{(\frac{y-\mu}{b})} & \text{for } y \le \mu \\
 1-\frac{1}{2}e^{\frac{\mu-y}{b}} & \text{for } y \ge \mu
-\end{cases}
-$$
+\end{cases}$$
 
-## D
+## D and E
 
+
+First to generate these random values we need to create the inverse functions.
+
+For the case when:
+
+$$x\lt\mu$$
+
+$$u = \frac{1}{2}e^{\frac{y-\mu}{b}}$$
+
+$$b*log(2u) = x - \mu$$
+
+Thus 
+$$x = \mu + b*log(2u)$$ 
+
+
+for 
+$$u>0$$
+
+$$x\lt\mu$$
+
+For the case when 
+
+$$x \ge \mu$$
+
+$$u = 1 - \frac{1}{2}e^{-\frac{y-\mu}{b}}$$
+$$-b*log(2-2u) = y- \mu$$
+
+Thus 
+$$\mu-b*log(2-2u) = y$$
+
+For u<1, x >= mu
+
+Using these inverse functions we can now do simulations.
 
 ```{r}
 
 set.seed(336)
 
+test_func<-function(u){
+  out_come_1 <- 0 + 5*log(2*u)
+  out_come_2 <- 0 - 5*log(2-2*u)
+  cbind(out_come_1^2, out_come_2^2)
+}
+
+a<-(test_func(seq(0.01,.999,.001)))
+
 rdoublex <- function(u, mu = 0, b = 5){
-  if( u > 0){
-    mu + b*log(2*u)
-  }else {
-     mu - b*log(2-2*u)
+  if( u < 0.5){
+    out_come_1 <- mu + b*log(2*u)
+    out_come_1
+  } else{
+     out_come_2 <- mu - b*log(2-2*u)
+     out_come_2
   }
+    
 }
 
 
 output_matrix <- matrix(0, nrow= 250, ncol = 50)
 
+# Basic Function
 for( j in 1:50){
   for(i in 1:250){
     random_value <- runif(i, 0, 1)
@@ -138,13 +183,77 @@ for( j in 1:50){
   }
 }
 
-output_matrix %>% 
+p1 <- output_matrix %>% 
   as.data.frame() %>% 
   mutate(N = 1:250) %>% 
   gather(replication, value, -N) %>% 
   ggplot(aes(N, value))+
-  geom_point(alpha=1/5)
+  geom_point(alpha=1/5)+
+  theme_minimal()+
+  labs(
+    title = "Convergence of a Laplace Distribution with mu = 0, b = 5",
+    subtitle = "50 Samples Drawn per Sample Size, N",
+    x = "Sample Size, N"
+  )
 
+#L
+
+output_matrix <- matrix(0, nrow= 250, ncol = 50)
+
+# Basic Function
+for( j in 1:50){
+  for(i in 1:250){
+    random_value <- runif(i, 0, 1)
+    output_matrix[i, j]<- mean(vapply(random_value, FUN = rdoublex, double(1))^2)
+  }
+}
+
+limit_one <- 20
+p2 <- output_matrix %>% 
+  as.data.frame() %>% 
+  mutate(N = 1:250) %>% 
+  gather(replication, value, -N) %>% 
+  ggplot(aes(N, value))+
+  geom_point(alpha=1/5)+
+  theme_minimal()+
+  labs(
+    title = "Convergence of a Laplace Distribution of Y_i^{2} with ~mu~= 0, b = 5",
+    subtitle = "50 Samples Drawn per Sample Size, N",
+    x = "Sample Size, N"
+  )+
+  geom_hline(yintercept = 50, size = 1, color = "blue")+
+  geom_hline(yintercept = 50 + limit_one, linetype = "dotted", color = "red", size = 1)+
+  geom_hline(yintercept = 50 - limit_one, linetype = "dotted", color = "red", size = 1)
+p2
+#K
+
+output_matrix <- matrix(0, nrow= 250, ncol = 50)
+
+# Basic Function
+for( j in 1:50){
+  for(i in 1:250){
+    random_value <- runif(i, 0, 1)
+    output_matrix[i, j]<- sqrt(mean(vapply(random_value, FUN = rdoublex, double(1))^2))
+  }
+}
+
+limit_two <- 3
+p3 <- output_matrix %>% 
+  as.data.frame() %>% 
+  mutate(N = 1:250) %>% 
+  gather(replication, value, -N) %>% 
+  ggplot(aes(N, value))+
+  geom_point(alpha=1/5)+
+  theme_minimal()+
+  labs(
+    title = "Convergence of a Laplace Distribution of sqrt(Y_i^{2}) with mu= 0, b = 5",
+    subtitle = "50 Samples Drawn per Sample Size, N",
+    x = "Sample Size, N"
+  )+
+  geom_hline(yintercept = 7.07, size = 1, color = "blue")+
+  geom_hline(yintercept = 7.07 + limit_two, linetype = "dotted", color = "red", size = 1)+
+  geom_hline(yintercept = 7.07 - limit_two, linetype = "dotted", color = "red", size = 1)
+p3
 ```
 
-## E
+These plots show that as the sample size increases the values we see approach the expected values. This is graphically showing the convergence of these functions to their expected values as the sample size increases. 
