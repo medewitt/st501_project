@@ -3,6 +3,8 @@ title: "ST501 Group Project"
 author: "Our Group"
 date: "7/20/2018"
 output:
+  pdf_document: 
+    latex_engine: xelatex
   html_document:
     df_print: paged
 ---
@@ -61,6 +63,7 @@ By the continuity theorem, $K = \sqrt{L} \ \ \underrightarrow{p} \ \sqrt{50}$
 Thus: $K\ \ \underrightarrow{p} \ \sqrt{50}$.
 
 ## C
+
 Derrive the CDF of the double exponential distribution.
 
 $$f_Y(y) = \frac{1}{2b} * e^{-(\frac{|{y-\mu|)}}{b})}$$
@@ -77,7 +80,8 @@ $$
 
 Solving for these leaves us with the following:
 
-For $y \le \mu$ :
+For 
+$$y \le \mu$$
 
 $$\int_{-\infty}^yf_Y(Y)dt$$
 $$\int_{-\infty}^y\frac{1}{2b} * e^{-(\frac{{t-\mu}}{b})}dt$$
@@ -107,11 +111,13 @@ $$1-\frac{1}{2}e^{\frac{\mu-y}{b}}$$
 
 In conclusion the CDF for the double exponential distribution is:
 
-$$F_Y(y)=
+$$
+F_Y(y)=
 \begin{cases}
 \frac{1}{2}e^{(\frac{y-\mu}{b})} & \text{for } y \le \mu \\
-1-\frac{1}{2}e^{\frac{\mu-y}{b}} & \text{for } y \ge \mu
-\end{cases}$$
+1-\frac{1}{2}e^{\frac{\mu-y}{b}} & \text{for } y \ge \mu \\
+\end{cases}
+$$
 
 ## D and E
 
@@ -120,24 +126,24 @@ First to generate these random values we need to create the inverse functions.
 
 For the case when:
 
-$$x\lt\mu$$
+$$y < \mu$$
 
 $$u = \frac{1}{2}e^{\frac{y-\mu}{b}}$$
 
-$$b*log(2u) = x - \mu$$
+$$b*log(2u) = y - \mu$$
 
 Thus 
-$$x = \mu + b*log(2u)$$ 
+$$y = \mu + b*log(2u)$$ 
 
 
 for 
 $$u>0$$
 
-$$x\lt\mu$$
+$$y<\mu$$
 
 For the case when 
 
-$$x \ge \mu$$
+$$y \ge \mu$$
 
 $$u = 1 - \frac{1}{2}e^{-\frac{y-\mu}{b}}$$
 $$-b*log(2-2u) = y- \mu$$
@@ -145,7 +151,7 @@ $$-b*log(2-2u) = y- \mu$$
 Thus 
 $$\mu-b*log(2-2u) = y$$
 
-For u<1, x >= mu
+For $u<1$, $x \ge \mu$
 
 Using these inverse functions we can now do simulations.
 
@@ -222,8 +228,10 @@ p2 <- output_matrix %>%
     x = "Sample Size, N"
   )+
   geom_hline(yintercept = 50, size = 1, color = "blue")+
-  geom_hline(yintercept = 50 + limit_one, linetype = "dotted", color = "red", size = 1)+
-  geom_hline(yintercept = 50 - limit_one, linetype = "dotted", color = "red", size = 1)
+  geom_hline(yintercept = 50 + limit_one, linetype = "dotted", 
+             color = "red", size = 1)+
+  geom_hline(yintercept = 50 - limit_one, 
+             linetype = "dotted", color = "red", size = 1)
 p2
 #K
 
@@ -251,8 +259,10 @@ p3 <- output_matrix %>%
     x = "Sample Size, N"
   )+
   geom_hline(yintercept = 7.07, size = 1, color = "blue")+
-  geom_hline(yintercept = 7.07 + limit_two, linetype = "dotted", color = "red", size = 1)+
-  geom_hline(yintercept = 7.07 - limit_two, linetype = "dotted", color = "red", size = 1)
+  geom_hline(yintercept = 7.07 + limit_two, 
+             linetype = "dotted", color = "red", size = 1)+
+  geom_hline(yintercept = 7.07 - limit_two, 
+             linetype = "dotted", color = "red", size = 1)
 p3
 ```
 
