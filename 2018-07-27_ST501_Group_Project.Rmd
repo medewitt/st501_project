@@ -1,6 +1,6 @@
 ---
 title: "ST501 Group Project"
-author: "Michael DeWitt"
+author: "Our Group"
 date: "7/20/2018"
 output: pdf_document
 ---
@@ -16,7 +16,47 @@ library(tidyverse)
 
 ## A
 
+$$f_Y(y) = \frac{1}{2b}e^{-(\frac{|y-\mu|}{b})}$$
+
+Given: $\mu = 0$ and $b=5$
+
+$$E(Y) = \int_{-\infty}^{\infty} y * f(y)dy$$
+$$= \int_{-\infty}^0y*\frac{1}{10}e^{\frac{y}{5}} + \int^{\infty}_0y*\frac{1}{10}e^{\frac{-y}{5}}$$
+
+$$= \frac{1}{10}\Bigg[\int_{-\infty}^0ye^{\frac{y}{5}} + \int^{\infty}_0y*e^{\frac{-y}{5}}\Bigg]$$
+
+$$= \frac{1}{10}\Bigg[\Big[(5y-25)e^{\frac{y}{5}}\Big]_{-\infty}^0 + \Big[(-5y-25)e^{\frac{-y}{5}}\Big]_0^\infty\Bigg]$$
+$$=\frac{1}{10}\Big[-25+25\Big]$$
+$$E(Y) = 0 \text{   }\blacksquare$$
+$$E(Y^2) = \int_{-\infty}^{\infty} y^2 * f(y)dy$$
+
+$$= \frac{1}{10}\Bigg[\int_{-\infty}^0y^2e^{\frac{y}{5}} + \int^{\infty}_0y^2*e^{\frac{-y}{5}}\Bigg]$$
+$$= \frac{1}{10}*\Big[250+250\Big]$$
+
+$$E(Y^2)= 50 \ \ \blacksquare$$
+
+Therefor $E(Y^2)$ exists.
+
+Thus:
+
+$E(Y) = 0$, $E(Y^2) = 50$ then $Var(Y) = 50$ by the variance computing formula.
+
+$$L = \frac{1}{n}\sum_{i=1}^{n}Y_i^2$$
+By the Law of Large Numbers:
+
+$$\frac{1}{n}\sum_{i=1}^{n}Y_i\ \ \underrightarrow{p} \ E(Y_i)$$
+By generalisation of the Law of Large Numbers:
+
+$$L = \frac{1}{n}\sum_{i=1}^{n}Y_i^2 \ \ \underrightarrow{p} \ E(Y_i^2) = 50$$
+Therefore:
+
+$$L \ \ \underrightarrow{p} \ \ 50 \ \ \blacksquare$$
+
 ## B
+
+By the continuity theorem, $K = \sqrt{L} \ \ \underrightarrow{p} \ \sqrt{50}$
+
+Thus: $K\ \ \underrightarrow{p} \ \sqrt{50}$.
 
 ## C
 Derrive the CDF of the double exponential distribution.
@@ -93,7 +133,7 @@ output_matrix <- matrix(0, nrow= 250, ncol = 50)
 
 for( j in 1:50){
   for(i in 1:250){
-    random_value <- runif(i, -.5, 5)
+    random_value <- runif(i, 0, 1)
     output_matrix[i, j]<- mean(vapply(random_value, FUN = rdoublex, double(1)))
   }
 }
