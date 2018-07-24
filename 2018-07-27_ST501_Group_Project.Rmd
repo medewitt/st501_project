@@ -267,3 +267,65 @@ p3
 ```
 
 These plots show that as the sample size increases the values we see approach the expected values. This is graphically showing the convergence of these functions to their expected values as the sample size increases. 
+
+# Part 2
+
+```{r}
+#Simulate 10000 samples of size 10,50,100,250 from Laplace distribution
+n<-c(10,50,100,250)
+N<-50
+mu<-0
+beta<-5
+
+rlaplace <- function(n = 1, mu = 0, beta = 5) {
+  q <- runif(n)
+  ifelse(q < 0.5, beta * log(2 * q) + mu, -beta * log(2 * (1 - q)) + mu)
+}
+
+#list to save data values in
+data<-list()
+for(i in 1:length(n)){data[[i]]<-matrix(0,nrow=N,ncol=n[i])}
+#Create the data
+#loop over sample sizes
+for (j in 1:length(n)){
+  #loop over data sets
+  for (i in 1:N){
+    data[[j]][i,]<-rlaplace(n=n[j],0,5)
+    }
+}
+#calculate the z statistic for each sample
+means10<-apply(X=data[[1]],FUN=function(data){(mean(data)-mu)/(beta/sqrt(n[1]))},MARGIN=1)
+means50<-apply(X=data[[2]],FUN=function(data){(mean(data)-mu)/(beta/sqrt(n[2]))},MARGIN=1)
+means100<-apply(X=data[[3]],FUN=function(data){(mean(data)-mu)/(beta/sqrt(n[3]))},MARGIN=1)
+means250<-apply(X=data[[3]],FUN=function(data){(mean(data)-mu)/(beta/sqrt(n[4]))},MARGIN=1)
+
+# Make Histog
+hist(means10,main=paste("Histogram of laplace's with n=",n[1]," from
+                       N(",mu,",",beta^2,")",sep=""), ylim=c(0,.5), prob=T)
+lines(seq(from=-3,to=3,by=0.01),dnorm(seq(from=-3,to=3,by=0.01)))
+
+hist(means50,main=paste("Histogram of laplace's with n=",n[2]," from
+                       N(",mu,",",beta^2,")",sep=""),prob=T,ylim=c(0,.5),)
+lines(seq(from=-3,to=3,by=0.01),dnorm(seq(from=-3,to=3,by=0.01)))
+
+hist(means100,main=paste("Histogram of laplace's with n=",n[3]," from
+                       N(",mu,",",beta^2,")",sep=""),prob=T,ylim=c(0,.5),)
+lines(seq(from=-3,to=3,by=0.01),dnorm(seq(from=-3,to=3,by=0.01)))
+hist(means250,main=paste("Histogram of laplace's with n=",n[4]," from
+                       N(",mu,",",beta^2,")",sep=""),prob=T,ylim=c(0,.5),)
+lines(seq(from=-3,to=3,by=0.01),dnorm(seq(from=-3,to=3,by=0.01)))
+
+par(mfrow= c(2,2))
+
+```
+
+
+## A
+
+## B
+
+## C
+
+## D
+
+
